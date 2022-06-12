@@ -2,7 +2,6 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useBridgeQuery } from '@sd/client';
 import { FilePath } from '@sd/core';
 import clsx from 'clsx';
-import byteSize from 'pretty-bytes';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
@@ -234,6 +233,7 @@ const RenderCell: React.FC<{
 			return (
 				<div className="flex flex-row items-center overflow-hidden">
 					<div className="flex items-center justify-center w-6 h-6 mr-3 shrink-0">
+						<div className="h-10 w-10 bg-red-500"></div>
 						<FileThumb
 							hasThumbnailOverride={hasNewThumbnail}
 							file={row}

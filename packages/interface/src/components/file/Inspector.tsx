@@ -51,7 +51,7 @@ export const Inspector = (props: { selectedFile?: FilePath; locationId: number }
 						<div className="flex items-center justify-center w-full h-64 overflow-hidden rounded-t-lg bg-gray-50 dark:bg-gray-900">
 							<FileThumb
 								hasThumbnailOverride={false}
-								className="!m-0 flex flex-shrink flex-grow-0"
+								className="m-0 flex flex-shrink flex-grow-0"
 								file={file_path}
 								locationId={props.locationId}
 							/>
