@@ -14,7 +14,7 @@ function Album(props: AlbumProps) {
 	const { id, title, images } = props;
 
 	return (
-		<article className="group cursor-pointer">
+		<article className="cursor-pointer hover:opacity-60 duration-300">
 			<div className="relative w-36 h-32 rounded-md">
 				<div
 					className="w-full rounded-md h-32 duration-300 no-repeat bg-center bg-cover"
@@ -28,13 +28,11 @@ function Album(props: AlbumProps) {
 				style={{
 					fontSize: 14
 				}}
-				className="font-semibold mt-1 group-hover:opacity-60 duration-300"
+				className="font-semibold mt-1"
 			>
 				{title}
 			</h3>
-			<h4 className="text-sm mt-0 text-gray-300 group-hover:opacity-60 duration-300">
-				{images.length}
-			</h4>
+			<h4 className="text-sm mt-0 text-gray-300">{images.length}</h4>
 		</article>
 	);
 }
