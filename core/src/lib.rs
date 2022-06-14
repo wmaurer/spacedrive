@@ -15,6 +15,7 @@ use ts_rs::TS;
 
 use crate::encode::ThumbnailJob;
 
+mod album;
 mod encode;
 mod file;
 mod job;
@@ -265,6 +266,13 @@ impl Node {
 				tag_id: _,
 			} => todo!(),
 			ClientCommand::TagDelete { id: _ } => todo!(),
+			// CRUD for albums
+			ClientCommand::AlbumCreate { name } => album::create_album(ctx, name).await?,
+			ClientCommand::AlbumUpdate { id, name } => album::update_album(ctx, id, name).await?,
+			ClientCommand::AlbumAssign { album_id, file_id } => {
+				album::album_assign(ctx, file_id, album_id).await?
+			}
+			ClientCommand::AlbumDelete { id } => album::album_delete(ctx, id).await?,
 			// CRUD for libraries
 			ClientCommand::SysVolumeUnmount { id: _ } => todo!(),
 			ClientCommand::LibDelete { id: _ } => todo!(),
@@ -346,6 +354,11 @@ pub enum ClientCommand {
 	TagUpdate { name: String, color: String },
 	TagAssign { file_id: i32, tag_id: i32 },
 	TagDelete { id: i32 },
+	// Albums
+	AlbumCreate { name: String },
+	AlbumUpdate { id: i32, name: String },
+	AlbumAssign { album_id: i32, file_id: i32 },
+	AlbumDelete { id: i32 },
 	// Locations
 	LocCreate { path: String },
 	LocUpdate { id: i32, name: Option<String> },
@@ -399,6 +412,7 @@ pub enum CoreEvent {
 #[ts(export)]
 pub enum CoreResponse {
 	Success(()),
+	AlbumCreateResponse { pub_id: String },
 	SysGetVolumes(Vec<sys::Volume>),
 	SysGetLocation(sys::LocationResource),
 	SysGetLocations(Vec<sys::LocationResource>),

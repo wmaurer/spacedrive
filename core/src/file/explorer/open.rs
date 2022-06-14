@@ -1,8 +1,9 @@
 use crate::{
+	album::{Album, AlbumError, AlbumWithFiles, FileInAlbum},
 	encode::THUMBNAIL_CACHE_DIR_NAME,
 	file::{DirectoryWithContents, FileError, FilePath},
 	node::get_nodestate,
-	prisma::file_path,
+	prisma::{album, file_in_album, file_path},
 	sys::get_location,
 	CoreContext,
 };
@@ -60,5 +61,31 @@ pub async fn open_dir(
 	Ok(DirectoryWithContents {
 		directory: directory.into(),
 		contents: file_paths,
+	})
+}
+
+pub async fn open_album(ctx: &CoreContext, album_id: i32) -> Result<AlbumWithFiles, AlbumError> {
+	let db = &ctx.database;
+
+	let album: Album = db
+		.album()
+		.find_unique(album::id::equals(album_id))
+		.exec()
+		.await?
+		.ok_or_else(|| AlbumError::AlbumNotFound(album_id))?
+		.into();
+
+	let files_in_album: Vec<FileInAlbum> = db
+		.file_in_album()
+		.find_many(vec![file_in_album::album_id::equals(album_id)])
+		.exec()
+		.await?
+		.into_iter()
+		.map(Into::into)
+		.collect();
+
+	Ok(AlbumWithFiles {
+		album,
+		files_in_album,
 	})
 }

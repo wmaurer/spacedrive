@@ -1,3 +1,5 @@
+export * from './bindings/Album';
+export * from './bindings/AlbumWithFiles';
 export * from './bindings/Client';
 export * from './bindings/ClientCommand';
 export * from './bindings/ClientQuery';
@@ -8,6 +10,7 @@ export * from './bindings/CoreResponse';
 export * from './bindings/DirectoryWithContents';
 export * from './bindings/EncryptionAlgorithm';
 export * from './bindings/File';
+export * from './bindings/FileInAlbum';
 export * from './bindings/FileKind';
 export * from './bindings/FilePath';
 export * from './bindings/JobReport';
