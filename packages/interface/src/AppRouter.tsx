@@ -40,6 +40,7 @@ export function AppRouter() {
 					<Route path="overview" element={<OverviewScreen />} />
 					<Route path="content" element={<ContentScreen />} />
 					<Route path="photos" element={<PhotosScreen />} />
+					<Route path="album/:id" element={<AlbumScreen />} />
 					<Route path="debug" element={<DebugScreen />} />
 					<Route path={'settings'} element={<SettingsScreen />}>
 						<Route index element={<GeneralSettings />} />
@@ -51,7 +52,6 @@ export function AppRouter() {
 						<Route path="library" element={<LibrarySettings />} />
 						<Route path="security" element={<SecuritySettings />} />
 						<Route path="locations" element={<LocationSettings />} />
-						<Route path="album/:id" element={<AlbumScreen />} />
 						<Route path="sharing" element={<SharingSettings />} />
 						<Route path="sync" element={<SyncSettings />} />
 						<Route path="tags" element={<TagsSettings />} />

@@ -88,14 +88,6 @@ export const FileList: React.FC<{ location_id: number; path: string; limit: numb
 			setSelectedRowIndex(selectedRowIndex + 1);
 	});
 
-	const Row = (index: number) => {
-		const row = currentDir?.contents?.[index];
-
-		if (!row) return null;
-
-		return <RenderRow key={index} row={row} rowIndex={index} dirId={currentDir?.directory.id} />;
-	};
-
 	const Header = () => (
 		<div>
 			<h1 className="pt-20 pl-4 text-xl font-bold ">{currentDir?.directory.name}</h1>
@@ -130,8 +122,9 @@ export const FileList: React.FC<{ location_id: number; path: string; limit: numb
 						data={currentDir?.contents}
 						ref={VList}
 						style={{ height: size.innerHeight ?? 600 }}
-						totalCount={currentDir?.contents.length || 0}
-						itemContent={Row}
+						itemContent={(index, row) => (
+							<RenderRow key={index} row={row} rowIndex={index} dirId={currentDir!.directory.id} />
+						)}
 						components={{ Header, Footer: () => <div className="w-full " /> }}
 						increaseViewportBy={{ top: 400, bottom: 200 }}
 						className="outline-none explorer-scroll"
