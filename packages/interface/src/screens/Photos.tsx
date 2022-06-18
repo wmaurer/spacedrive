@@ -1,7 +1,7 @@
 // import { useBridgeCommand, useBridgeQuery } from '@sd/client';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { ReactComponent as Image } from '../assets/svg/image.svg';
 import { TopBar } from '../components/layout/TopBar';
 
 interface AlbumProps {
@@ -14,30 +14,32 @@ function Album(props: AlbumProps) {
 	const { id, title, images } = props;
 
 	return (
-		<article className="cursor-pointer hover:opacity-60 duration-300">
-			<div className="relative w-36 h-32 rounded-md">
-				<div
-					className="w-full rounded-md h-32 duration-300 no-repeat bg-center bg-cover"
+		<Link to={`/album/${id}`}>
+			<article className="cursor-pointer hover:opacity-60 duration-300">
+				<div className="relative w-36 h-32 rounded-md">
+					<div
+						className="w-full rounded-md h-32 duration-300 no-repeat bg-center bg-cover"
+						style={{
+							backgroundImage: `url(${images[0]})`
+						}}
+						key={images[0]}
+					></div>
+				</div>
+				<h3
 					style={{
-						backgroundImage: `url(${images[0]})`
+						fontSize: 14
 					}}
-					key={images[0]}
-				></div>
-			</div>
-			<h3
-				style={{
-					fontSize: 14
-				}}
-				className="font-semibold mt-1"
-			>
-				{title}
-			</h3>
-			<h4 className="text-sm mt-0 text-gray-300">{images.length}</h4>
-		</article>
+					className="font-semibold mt-1"
+				>
+					{title}
+				</h3>
+				<h4 className="text-sm mt-0 text-gray-300">{images.length}</h4>
+			</article>
+		</Link>
 	);
 }
 
-export const PhotosScreen: React.FC<{}> = (props) => {
+export function PhotosScreen() {
 	// Fetch albums
 	const albums = [
 		{
@@ -67,4 +69,4 @@ export const PhotosScreen: React.FC<{}> = (props) => {
 			</div>
 		</div>
 	);
-};
+}
