@@ -1,3 +1,9 @@
+import Card from '@/components/layout/Card';
+import Dialog from '@/components/layout/Dialog';
+import { Toggle } from '@/components/primitive';
+import { InputContainer } from '@/components/primitive/InputContainer';
+import { SettingsContainer } from '@/components/settings/SettingsContainer';
+import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import { CollectionIcon, TrashIcon } from '@heroicons/react/outline';
 import { PlusIcon } from '@heroicons/react/solid';
 import { useBridgeCommand, useBridgeQuery } from '@sd/client';
@@ -6,13 +12,6 @@ import { LibraryConfig, LibraryConfigWrapped } from '@sd/core';
 import { Button, Input } from '@sd/ui';
 import { DotsSixVertical } from 'phosphor-react';
 import React, { useContext, useState } from 'react';
-
-import Card from '../../../components/layout/Card';
-import Dialog from '../../../components/layout/Dialog';
-import { Toggle } from '../../../components/primitive';
-import { InputContainer } from '../../../components/primitive/InputContainer';
-import { SettingsContainer } from '../../../components/settings/SettingsContainer';
-import { SettingsHeader } from '../../../components/settings/SettingsHeader';
 
 // type LibrarySecurity = 'public' | 'password' | 'vault';
 

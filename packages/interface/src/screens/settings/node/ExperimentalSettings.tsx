@@ -1,10 +1,9 @@
+import { useNodeStore } from '@/components/device/Stores';
+import { Toggle } from '@/components/primitive';
+import { InputContainer } from '@/components/primitive/InputContainer';
+import { SettingsContainer } from '@/components/settings/SettingsContainer';
+import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import React from 'react';
-
-import { useNodeStore } from '../../../components/device/Stores';
-import { Toggle } from '../../../components/primitive';
-import { InputContainer } from '../../../components/primitive/InputContainer';
-import { SettingsContainer } from '../../../components/settings/SettingsContainer';
-import { SettingsHeader } from '../../../components/settings/SettingsHeader';
 
 export default function ExperimentalSettings() {
 	const { isExperimental, setIsExperimental } = useNodeStore();

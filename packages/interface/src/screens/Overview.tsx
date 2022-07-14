@@ -1,3 +1,5 @@
+import { Device } from '@/components/device/Device';
+import Dialog from '@/components/layout/Dialog';
 import { DatabaseIcon, ExclamationCircleIcon, PlusIcon } from '@heroicons/react/solid';
 import { useBridgeQuery, useLibraryQuery } from '@sd/client';
 import { AppPropsContext } from '@sd/client';
@@ -10,9 +12,6 @@ import { useCountUp } from 'react-countup';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import create from 'zustand';
-
-import { Device } from '../components/device/Device';
-import Dialog from '../components/layout/Dialog';
 
 interface StatItemProps {
 	title: string;

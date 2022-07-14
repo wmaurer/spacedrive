@@ -1,3 +1,9 @@
+import { SidebarLink } from '@/components/file/Sidebar';
+import {
+	SettingsHeading,
+	SettingsIcon,
+	SettingsScreenContainer
+} from '@/components/settings/SettingsScreenContainer';
 import {
 	CogIcon,
 	CollectionIcon,
@@ -24,13 +30,6 @@ import {
 	UsersFour
 } from 'phosphor-react';
 import React from 'react';
-
-import { SidebarLink } from '../../components/file/Sidebar';
-import {
-	SettingsHeading,
-	SettingsIcon,
-	SettingsScreenContainer
-} from '../../components/settings/SettingsScreenContainer';
 
 export const SettingsScreen: React.FC = () => {
 	return (

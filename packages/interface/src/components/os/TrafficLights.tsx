@@ -1,10 +1,10 @@
+import { useFocusState } from '@/hooks/useFocusState';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
 import closeIconPath from '../../assets/svg/macos_close.svg';
 import fullscreenIconPath from '../../assets/svg/macos_fullscreen.svg';
 import minimizeIconPath from '../../assets/svg/macos_minimize.svg';
-import { useFocusState } from '../../hooks/useFocusState';
 import { DefaultProps } from '../primitive/types';
 
 export interface TrafficLightsProps extends DefaultProps {
@@ -71,7 +71,7 @@ const TrafficLight: React.FC<TrafficLightProps> = (props) => {
 		>
 			<img
 				src={iconPath.current}
-				className="opacity-0 group-hover:opacity-100 group-active:opacity-100 pointer-events-none"
+				className="opacity-0 pointer-events-none group-hover:opacity-100 group-active:opacity-100"
 			/>
 		</div>
 	);

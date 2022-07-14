@@ -1,12 +1,11 @@
+import { Toggle } from '@/components/primitive';
+import { InputContainer } from '@/components/primitive/InputContainer';
+import Listbox from '@/components/primitive/Listbox';
+import { SettingsContainer } from '@/components/settings/SettingsContainer';
+import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import { useBridgeQuery } from '@sd/client';
 import { Button, Input } from '@sd/ui';
 import React from 'react';
-
-import { Toggle } from '../../../components/primitive';
-import { InputContainer } from '../../../components/primitive/InputContainer';
-import Listbox from '../../../components/primitive/Listbox';
-import { SettingsContainer } from '../../../components/settings/SettingsContainer';
-import { SettingsHeader } from '../../../components/settings/SettingsHeader';
 
 export default function P2PSettings() {
 	return (

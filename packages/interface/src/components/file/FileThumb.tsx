@@ -1,10 +1,10 @@
+import icons from '@/assets/icons';
 import { useBridgeQuery, useExplorerStore } from '@sd/client';
 import { AppPropsContext } from '@sd/client';
 import { FilePath } from '@sd/core';
 import clsx from 'clsx';
 import React, { useContext } from 'react';
 
-import icons from '../../assets/icons';
 import { Folder } from '../icons/Folder';
 
 export default function FileThumb(props: {

@@ -1,9 +1,8 @@
+import { InputContainer } from '@/components/primitive/InputContainer';
+import { SettingsContainer } from '@/components/settings/SettingsContainer';
+import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import { Button } from '@sd/ui';
 import React from 'react';
-
-import { InputContainer } from '../../../components/primitive/InputContainer';
-import { SettingsContainer } from '../../../components/settings/SettingsContainer';
-import { SettingsHeader } from '../../../components/settings/SettingsHeader';
 
 export default function SecuritySettings() {
 	return (

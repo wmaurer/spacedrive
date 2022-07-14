@@ -1,11 +1,10 @@
+import { FileList } from '@/components/file/FileList';
+import { Inspector } from '@/components/file/Inspector';
+import { TopBar } from '@/components/layout/TopBar';
 import { useLibraryQuery } from '@sd/client';
 import { useExplorerStore } from '@sd/client';
 import React from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-
-import { FileList } from '../components/file/FileList';
-import { Inspector } from '../components/file/Inspector';
-import { TopBar } from '../components/layout/TopBar';
 
 export const ExplorerScreen: React.FC<{}> = () => {
 	let [searchParams] = useSearchParams();

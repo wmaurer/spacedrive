@@ -1,3 +1,4 @@
+import { default as types } from '@/constants/file-types.json';
 import { Transition } from '@headlessui/react';
 import { ShareIcon } from '@heroicons/react/solid';
 import { useInspectorStore, useLibraryCommand } from '@sd/client';
@@ -7,7 +8,6 @@ import moment from 'moment';
 import { Heart, Link } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
 
-import { default as types } from '../../constants/file-types.json';
 import FileThumb from './FileThumb';
 
 interface MetaItemProps {
