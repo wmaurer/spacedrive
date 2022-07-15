@@ -5,7 +5,8 @@ import svgr from 'vite-plugin-svgr';
 
 import { name, version } from './package.json';
 
-console.log(path.resolve(__dirname, '../../packages/interface/src'));
+const interfacePath = path.resolve(__dirname, '../../packages/interface/src');
+console.log({ interfacePath });
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -33,7 +34,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@/': path.resolve(__dirname, '/')
+			'@/': interfacePath
 		}
 	}
 });
