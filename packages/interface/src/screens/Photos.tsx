@@ -1,7 +1,7 @@
 // import { useBridgeCommand, useBridgeQuery } from '@sd/client';
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useKey } from 'rooks';
 
@@ -74,20 +74,24 @@ export function PhotosScreen() {
 	useKey('ArrowLeft', (e) => e.preventDefault());
 	useKey('ArrowRight', (e) => e.preventDefault());
 
+	const [hoveredMenuItem, setHoveredMenuItem] = useState('');
+
 	return (
 		<div className="flex flex-col w-full h-screen overflow-x-hidden">
 			<TopBar />
-			<div data-tauri-drag-region className="flex flex-shrink-0 w-full h-5" />
-			<div className="flex flex-col p-5 pt-0 space-y-5 pb-7">
+
+			<div className="flex flex-col space-y-5 pb-7">
 				{/* Multi button with photos, albums, */}
 				<Tab.Group>
-					<Tab.List className="bg-gray-900 p-[5px] rounded w-fit space-x-2 text-sm">
+					<Tab.List className="pl-5  border-gray-500 bg-gray-550/50 p-[5px] w-full space-x-2 text-sm relative">
 						{Object.keys(tabs).map((key) => (
 							<Tab
+								onFocus={() => setHoveredMenuItem(key)}
 								className={({ selected }) =>
 									clsx({
-										'rounded px-2 py-1': true,
-										'bg-white/10': selected
+										'rounded px-2 py-1 outline-none duration-150': true,
+										'bg-white/10': selected,
+										'hover:bg-white/5 active:bg-white/10': !selected
 									})
 								}
 							>
@@ -95,7 +99,7 @@ export function PhotosScreen() {
 							</Tab>
 						))}
 					</Tab.List>
-					<Tab.Panels>
+					<Tab.Panels className="p-5 pt-0">
 						{Object.values(tabs).map((content) => (
 							<Tab.Panel className="outline-none">{content}</Tab.Panel>
 						))}

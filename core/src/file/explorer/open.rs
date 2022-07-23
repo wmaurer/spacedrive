@@ -2,38 +2,40 @@ use crate::{
 	album::{Album, AlbumError, AlbumWithFiles, FileInAlbum},
 	encode::THUMBNAIL_CACHE_DIR_NAME,
 	file::{DirectoryWithContents, FileError, FilePath},
-	node::get_nodestate,
-	prisma::{album, file_in_album, file_path},
+	library::LibraryContext,
+	prisma::{file_path, tag, tag_on_file},
 	sys::get_location,
-	CoreContext,
+	tag::{Tag, TagError, TagOnFile, TagWithFiles},
 };
+use log::info;
 use std::path::Path;
 
 pub async fn open_dir(
-	ctx: &CoreContext,
-	location_id: &i32,
-	path: &str,
+	ctx: &LibraryContext,
+	location_id: i32,
+	path: impl AsRef<Path>,
 ) -> Result<DirectoryWithContents, FileError> {
-	let db = &ctx.database;
-	let config = get_nodestate();
-
 	// get location
-	let location = get_location(ctx, location_id.clone()).await?;
+	let location = get_location(ctx, location_id).await?;
 
-	let directory = db
+	let path_str = path.as_ref().to_string_lossy().to_string();
+
+	let directory = ctx
+		.db
 		.file_path()
 		.find_first(vec![
 			file_path::location_id::equals(Some(location.id)),
-			file_path::materialized_path::equals(path.into()),
+			file_path::materialized_path::equals(path_str),
 			file_path::is_dir::equals(true),
 		])
 		.exec()
 		.await?
-		.ok_or(FileError::DirectoryNotFound(path.to_string()))?;
+		.ok_or_else(|| FileError::DirectoryNotFound(path.as_ref().to_path_buf()))?;
 
-	println!("DIRECTORY: {:?}", directory);
+	info!("DIRECTORY: {:?}", directory);
 
-	let mut file_paths: Vec<FilePath> = db
+	let mut file_paths: Vec<FilePath> = ctx
+		.db
 		.file_path()
 		.find_many(vec![
 			file_path::location_id::equals(Some(location.id)),
@@ -48,10 +50,12 @@ pub async fn open_dir(
 
 	for file_path in &mut file_paths {
 		if let Some(file) = &mut file_path.file {
-			let thumb_path = Path::new(&config.data_path)
+			let thumb_path = ctx
+				.config()
+				.data_directory()
 				.join(THUMBNAIL_CACHE_DIR_NAME)
-				.join(format!("{}", location.id))
-				.join(file.cas_id.clone())
+				.join(location.id.to_string())
+				.join(&file.cas_id)
 				.with_extension("webp");
 
 			file.has_thumbnail = thumb_path.exists();
@@ -64,28 +68,28 @@ pub async fn open_dir(
 	})
 }
 
-pub async fn open_album(ctx: &CoreContext, album_id: i32) -> Result<AlbumWithFiles, AlbumError> {
-	let db = &ctx.database;
-
-	let album: Album = db
-		.album()
-		.find_unique(album::id::equals(album_id))
+pub async fn open_tag(ctx: &LibraryContext, tag_id: i32) -> Result<TagWithFiles, TagError> {
+	let tag: Tag = ctx
+		.db
+		.tag()
+		.find_unique(tag::id::equals(tag_id))
 		.exec()
 		.await?
-		.ok_or_else(|| AlbumError::AlbumNotFound(album_id))?
+		.ok_or(TagError::TagNotFound(tag_id))?
 		.into();
 
-	let files_in_album: Vec<FileInAlbum> = db
-		.file_in_album()
-		.find_many(vec![file_in_album::album_id::equals(album_id)])
+	let files_with_tag: Vec<TagOnFile> = ctx
+		.db
+		.tag_on_file()
+		.find_many(vec![tag_on_file::tag_id::equals(tag_id)])
 		.exec()
 		.await?
 		.into_iter()
 		.map(Into::into)
 		.collect();
 
-	Ok(AlbumWithFiles {
-		album,
-		files_in_album,
+	Ok(TagWithFiles {
+		tag,
+		files_with_tag,
 	})
 }

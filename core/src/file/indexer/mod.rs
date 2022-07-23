@@ -1,15 +1,17 @@
-use crate::job::{Job, JobReportUpdate, WorkerContext};
+use crate::job::{Job, JobReportUpdate, JobResult, WorkerContext};
+use std::path::PathBuf;
 
 use self::scan::ScanProgress;
 mod scan;
 
+// Re-exporting
 pub use scan::*;
 
-pub use scan::scan_path;
+use scan::scan_path;
 
 #[derive(Debug)]
 pub struct IndexerJob {
-	pub path: String,
+	pub path: PathBuf,
 }
 
 #[async_trait::async_trait]
@@ -17,9 +19,8 @@ impl Job for IndexerJob {
 	fn name(&self) -> &'static str {
 		"indexer"
 	}
-	async fn run(&self, ctx: WorkerContext) -> Result<(), Box<dyn std::error::Error>> {
-		let core_ctx = ctx.core_ctx.clone();
-		scan_path(&core_ctx, self.path.as_str(), move |p| {
+	async fn run(&self, ctx: WorkerContext) -> JobResult {
+		scan_path(&ctx.library_ctx(), &self.path, move |p| {
 			ctx.progress(
 				p.iter()
 					.map(|p| match p.clone() {

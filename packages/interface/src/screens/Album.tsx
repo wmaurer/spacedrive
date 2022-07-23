@@ -3,6 +3,8 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { VirtuosoGrid } from 'react-virtuoso';
 
+import { TopBar } from '../components/layout/TopBar';
+
 const ListContainer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
@@ -19,9 +21,9 @@ export function AlbumScreen() {
 
 	return (
 		<div className="flex flex-col w-full h-screen overflow-x-hidden custom-scroll page-scroll">
-			<div data-tauri-drag-region className="flex flex-shrink-0 w-full h-5" />
-			<div className="flex flex-col space-y-5 pb-7 w-full h-full">
-				<h1 className="text-xl font-bold px-5 pt-0">Selfies</h1>
+			<TopBar />
+
+			<div className="flex flex-col space-y-5 w-full h-full">
 				<VirtuosoGrid
 					className="explorer-scroll flex flex-row"
 					totalCount={images.length}

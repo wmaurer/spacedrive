@@ -1,13 +1,11 @@
 // use crate::native;
-use crate::{node::get_nodestate, prisma::volume::*};
+use crate::{library::LibraryContext, prisma::volume::*};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 // #[cfg(not(target_os = "macos"))]
 use std::process::Command;
 // #[cfg(not(target_os = "macos"))]
 use sysinfo::{DiskExt, System, SystemExt};
-
-use crate::CoreContext;
 
 use super::SysError;
 
@@ -26,23 +24,21 @@ pub struct Volume {
 }
 
 impl Volume {
-	pub async fn save(ctx: &CoreContext) -> Result<(), SysError> {
-		let db = &ctx.database;
-		let config = get_nodestate();
-
+	pub async fn save(ctx: &LibraryContext) -> Result<(), SysError> {
 		let volumes = Self::get_volumes()?;
 
 		// enter all volumes associate with this client add to db
 		for volume in volumes {
-			db.volume()
+			ctx.db
+				.volume()
 				.upsert(
 					node_id_mount_point_name(
-						config.node_id.clone(),
+						ctx.node_local_id,
 						volume.mount_point.to_string(),
 						volume.name.to_string(),
 					),
 					(
-						node_id::set(config.node_id),
+						node_id::set(ctx.node_local_id),
 						name::set(volume.name),
 						mount_point::set(volume.mount_point),
 						vec![
@@ -67,7 +63,7 @@ impl Volume {
 		Ok(())
 	}
 	pub fn get_volumes() -> Result<Vec<Volume>, SysError> {
-		let all_volumes: Vec<Volume> = System::new_all()
+		Ok(System::new_all()
 			.disks()
 			.iter()
 			.map(|disk| {
@@ -123,15 +119,8 @@ impl Volume {
 					is_root_filesystem: mount_point == "/",
 				}
 			})
-			.collect();
-
-		let volumes = all_volumes
-			.clone()
-			.into_iter()
 			.filter(|volume| !volume.mount_point.starts_with("/System"))
-			.collect();
-
-		Ok(volumes)
+			.collect())
 	}
 }
 
