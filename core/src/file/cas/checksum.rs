@@ -1,6 +1,6 @@
 use data_encoding::HEXLOWER;
 use ring::digest::{Context, SHA256};
-use std::path::PathBuf;
+use std::{io::BufReader, path::PathBuf};
 use tokio::{
 	fs::File,
 	io::{self, AsyncReadExt, AsyncSeekExt, SeekFrom},
@@ -18,6 +18,7 @@ async fn read_at(file: &mut File, offset: u64, size: u64) -> Result<Vec<u8>, io:
 	Ok(buf)
 }
 
+// the CAS id is a sampled SHA256 hash of the file, generated at a consistent speed.
 pub async fn generate_cas_id(path: PathBuf, size: u64) -> Result<String, io::Error> {
 	// open file reference
 	let mut file = File::open(path).await?;
@@ -48,21 +49,22 @@ pub async fn generate_cas_id(path: PathBuf, size: u64) -> Result<String, io::Err
 	Ok(hex)
 }
 
-// pub fn full_checksum(path: &str) -> Result<String> {
-// 	// read file as buffer and convert to digest
-// 	let mut reader = BufReader::new(File::open(path).unwrap());
-// 	let mut context = Context::new(&SHA256);
-// 	let mut buffer = [0; 1024];
-// 	loop {
-// 		let count = reader.read(&mut buffer)?;
-// 		if count == 0 {
-// 			break;
-// 		}
-// 		context.update(&buffer[..count]);
-// 	}
-// 	let digest = context.finish();
-// 	// create a lowercase hash from
-// 	let hex = HEXLOWER.encode(digest.as_ref());
+// used by the validator to confirm for certain that two files are the same
+pub fn generate_checksum(path: &str) -> Result<String, io::Error> {
+	// read file as buffer and convert to digest
+	let mut reader = BufReader::new(File::open(path).unwrap());
+	let mut context = Context::new(&SHA256);
+	let mut buffer = [0; 1024];
+	loop {
+		let count = reader.read(&mut buffer)?;
+		if count == 0 {
+			break;
+		}
+		context.update(&buffer[..count]);
+	}
+	let digest = context.finish();
+	// create a lowercase hash from
+	let hex = HEXLOWER.encode(digest.as_ref());
 
-// 	Ok(hex)
-// }
+	Ok(hex)
+}
