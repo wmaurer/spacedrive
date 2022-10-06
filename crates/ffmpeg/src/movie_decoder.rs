@@ -599,15 +599,14 @@ impl MovieDecoder {
 		let mut scale = String::new();
 
 		if scaled_width != -1 && scaled_height != -1 {
-			let _ = write!(scale, "w={scaled_width}:h={scaled_height}");
+			scale += &format!("w={scaled_width}:h={scaled_height}");
 			if maintain_aspect_ratio {
-				let _ = write!(scale, ":force_original_aspect_ratio=decrease");
+				scale += &format!(":force_original_aspect_ratio=decrease");
 			}
 		} else if !maintain_aspect_ratio {
-			if scaled_width == -1 {
-				let _ = write!(scale, "w={scaled_height}:h={scaled_height}");
-			} else {
-				let _ = write!(scale, "w={scaled_width}:h={scaled_width}");
+			match scaled_width {
+				-1 => scale += &format!("w={scaled_height}:h={scaled_height}"),
+				_ => scale += &format!("w={scaled_width}:h={scaled_width}"),
 			}
 		} else {
 			let size_int = if scaled_height == -1 {
@@ -643,10 +642,9 @@ impl MovieDecoder {
 					}
 				}
 
-				let _ = write!(scale, "w={scaled_width}:h={scaled_height}");
+				scale += &format!("w={scaled_width}:h={scaled_height}");
 			} else if scaled_height > scaled_width {
-				let _ = write!(
-					scale,
+				scale += &format!(
 					"w=-1:h={}",
 					if size_int == 0 {
 						scaled_height
@@ -655,8 +653,7 @@ impl MovieDecoder {
 					}
 				);
 			} else {
-				let _ = write!(
-					scale,
+				scale += &format!(
 					"w={}:h=-1",
 					if size_int == 0 {
 						scaled_width
